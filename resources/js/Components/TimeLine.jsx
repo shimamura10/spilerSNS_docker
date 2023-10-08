@@ -1,11 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import axios from "axios";
-import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField} from '@mui/material';
+import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton} from '@mui/material';
 import { spacing } from '@mui/system';
+import CommentIcon from '@mui/icons-material/Comment';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 const TimeLine = (props) => {
-    const { posts, auth } = props;
+    const { auth } = props;
+    const [ posts, setPosts ] = useState(props.posts);
+    console.log(posts);
+
+    // コメントの表示・非表示の切り替え
     const displayComments = (e, id) => {
         const comments = document.getElementById(`post${id}-comments`);
         const button = document.getElementById(`button${id}`);
@@ -13,17 +20,84 @@ const TimeLine = (props) => {
             comments.style.display = 'block';
             button.textContent = 'コメントを非表示にする'
         } else {
-            comments.style.display = 'none';   
+            comments.style.display = 'none';
             button.textContent = 'コメントを表示する'
         }
     }
     
     const sendComment = (post_id, e) => {
         e.preventDefault();
+        // フロント側でコメント追加
+        const newPosts = [];
+        posts.map((post) => {
+            if (post.id == post_id)
+            {
+                post.comments.push({
+                    id: crypto.randomUUID,
+                    user_id: auth.user.id,
+                    post_id: post_id,
+                    body: e.target.comment.value,
+                    author: auth.user,
+                });
+                console.log(post);
+            } 
+            newPosts.push(post);
+        });
+        setPosts(newPosts);
+        // console.log(newPosts);
+        // console.log(posts);
+        // バックエンドにコメント送信
         axios.post(route('create.comment'), {
             post_id: post_id,
             user_id: auth.user.id,
             body: e.target.comment.value
+        }).then((response) => {
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    const storeLike = (e, post_id) => {
+        e.preventDefault();
+        // フロント側でいいね追加
+        const newPosts = [];
+        posts.map((post) => {
+            if (post.id == post_id)
+            {
+                post.liked_by.push(auth.user);
+            } 
+            newPosts.push(post);
+        });
+        setPosts(newPosts);
+        // バックエンドに送信
+        axios.post(route('post.storeLike'), {
+            post_id: post_id,
+            user_id: auth.user.id,
+        }).then((response) => {
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    const deleteLike = (e, post_id) => {
+        e.preventDefault();
+        // フロント側でいいね削除
+        const newPosts = [];
+        posts.map((post) => {
+            if (post.id == post_id)
+            {
+                newPosts.push({...post, liked_by: post.liked_by.filter(like => like.id !== auth.user.id)});
+            } else {
+                newPosts.push(post);
+            }
+        });
+        setPosts(newPosts);
+        // バックエンドに送信
+        axios.delete(route('post.deleteLike'), {
+            data: {
+                post_id: post_id,
+                user_id: auth.user.id,
+            }
         }).then((response) => {
         }).catch(error => {
             console.log(error);
@@ -54,7 +128,40 @@ const TimeLine = (props) => {
                             </ImageListItem>
                         ))}
                     </ImageList>
-                    <Typography sx={{ m:1 }}>コメント数：{ post.comments.length }</Typography>
+                    <Box sx={{display: 'flex', alignItems: 'center'}} >
+                        <Box sx={{display: 'flex', alignItems: 'center'}} >
+                            <CommentIcon/>
+                            <Typography sx={{ m:1 }}>{ post.comments.length }</Typography>
+                        </Box>
+                        <Box sx={{display: 'flex', alignItems: 'center'}} >
+                            {
+                                (post.liked_by.find(like => like.id === auth.user.id)) ? (
+                                    <IconButton 
+                                        sx={{ type:'submit' }}
+                                        arial-label=""
+                                        size="small"
+                                        // value={category.id}
+                                        // onClick={handleSendData}
+                                        onClick={(e) => deleteLike(e, post.id)}
+                                    >
+                                        <FavoriteIcon sx={{ color: '#f27481'}}/>
+                                    </IconButton>
+                                ) : (
+                                    <IconButton 
+                                        sx={{ type:'submit' }}
+                                        arial-label=""
+                                        size="small"
+                                        // value={category.id}
+                                        // onClick={handleSendData}
+                                        onClick={(e) => storeLike(e, post.id)}
+                                    >
+                                        <FavoriteBorderIcon />
+                                    </IconButton>
+                                )
+                            }
+                            <Typography sx={{ m:1 }}>{ post.liked_by.length }</Typography>
+                        </Box>
+                    </Box>
                     
                     <Divider />
                     <Button sx={{ width: "100%" }} variant="text" onClick={(e)=>displayComments(e, post.id)} id={`button${post.id}`}>コメントを表示する</Button>
@@ -76,7 +183,7 @@ const TimeLine = (props) => {
                             <Box key={comment.id}>
                                 <Divider />
                                 <Box sx={{ display:'flex', alignItems: 'center'}}>
-                                    {/* <Avatar sx={{ width: 24, height: 24, m:1 }} src={ comment.author.icon_url } /> */}
+                                    <Avatar sx={{ width: 24, height: 24, m:1 }} src={ comment.author.icon_url } />
                                     <Typography variant="h6" sx={{ ml: 1 }}>{ comment.author.name }</Typography>
                                 </Box>
                                 <Typography>{comment.body}</Typography>

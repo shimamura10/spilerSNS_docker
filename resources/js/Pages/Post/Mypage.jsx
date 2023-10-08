@@ -12,7 +12,6 @@ const Mypage = (props) => {
     
     const [ followingCategories, setFollowingCategories ] = useState(props.user.categories);
     const [ user, setUser ] = useState(props.user);
-    console.log(user);
     
     const addFollowingCategory = (id, name) => {
         // followingCategories.push({id:4, name:"ダンガンロンパ"})

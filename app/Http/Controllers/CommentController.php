@@ -14,6 +14,6 @@ class CommentController extends Controller
     {
         $comment->fill($request->all())->save();
         
-        return redirect(route("home"));
+        // return redirect(route("home"));
     }
 }

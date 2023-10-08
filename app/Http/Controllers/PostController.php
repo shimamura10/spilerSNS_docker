@@ -16,14 +16,14 @@ class PostController extends Controller
 {
     public function mypage(User $user, Category $category)
     {
-        $myposts = $user->posts->load('comments.author');
+        $myposts = $user->posts->load(['comments.author', 'likedBy']);
         return Inertia::render("Post/Mypage", ["posts" => $myposts, "user" => $user->load("categories"), "categories" => $category->get()]);
     }
     
     public function home(Post $post, Category $category)
     {
         // dd($post->get()->load('comments.author'));
-        return Inertia::render("Post/Home", ["posts" => $post->orderBy('created_at', 'desc')->get()->load('comments.author'), "categories" => $category->get()]);
+        return Inertia::render("Post/Home", ["posts" => $post->orderBy('created_at', 'desc')->get()->load(['comments.author', 'likedBy']), "categories" => $category->get()]);
     }
     
     public function create(Category $category)
@@ -45,6 +45,20 @@ class PostController extends Controller
         }
         
         return redirect(route("home"));
+    }
+
+    public function storeLike(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $post = Post::find($request->input('post_id'));
+        $post->likedBy()->attach($user_id);
+    }
+
+    public function deleteLike(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $post = Post::find($request->input('post_id'));
+        $post->likedBy()->detach($user_id);
     }
     
     public function test()

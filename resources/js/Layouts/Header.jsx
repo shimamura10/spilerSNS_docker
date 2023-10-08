@@ -32,10 +32,10 @@ export default function Header({auth, header, children}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-    setAnchorEl(null);
+        setAnchorEl(null);
     };
     return (
         <div>
@@ -61,16 +61,16 @@ export default function Header({auth, header, children}) {
                     <List>
                         <ListItem disablePadding>
                             <Tooltip title="Account settings">
-                              <IconButton
-                                onClick={handleClick}
-                                size="small"
-                                sx={{ ml: 2 }}
-                                aria-controls={open ? 'account-menu' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={open ? 'true' : undefined}
-                              >
-                                <Avatar src={ auth.user.icon_url } />
-                              </IconButton>
+                                <IconButton
+                                  onClick={handleClick}
+                                  size="small"
+                                  sx={{ ml: 2 }}
+                                  aria-controls={open ? 'account-menu' : undefined}
+                                  aria-haspopup="true"
+                                  aria-expanded={open ? 'true' : undefined}
+                                >
+                                    <Avatar src={ auth.user.icon_url } />
+                                </IconButton>
                             </Tooltip>
                         </ListItem>
                         <ListItem disablePadding>
@@ -134,10 +134,10 @@ export default function Header({auth, header, children}) {
             anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           >
             <MenuItem  component={Link} href={route('profile.edit')}>
-              <Avatar /> Profile
+              <PersonIcon sx={{pr:1}}/> Profile
             </MenuItem>
             <MenuItem component={Link} href={route('logout')} method="post">
-              <Avatar /> My account
+              <Logout sx={{pr:1}}/> Log out
             </MenuItem>
         </Menu>
         </div>
