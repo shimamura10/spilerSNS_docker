@@ -53,7 +53,10 @@ const Mypage = (props) => {
             
             <Box sx={{ display: 'flex' }}>
                 <TimeLine posts={ posts }/>
-                <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory}/>
+                <Card sx={{ p: 2, m:1, width: 500}}>
+                    <Typography variant="h5">カテゴリーのフォロー</Typography>
+                    <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory}/>
+                </Card>
             </Box>
             
         </Header>

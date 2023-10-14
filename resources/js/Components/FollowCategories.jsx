@@ -17,16 +17,14 @@ const getCsrfToken = () => {
     return '';
 }
 
-const FollowCategories = (props) => {
-    const { categories, user } = props;
-    
+const FollowCategories = ({categories, user}) => {    
     // 検索まわり
     const [ searchTerm, setSearchTerm ] = useState("");
     const searchCategories = (e) => {
         e.preventDefault();
         const categoryOptions = document.querySelectorAll('.category-option');
         categoryOptions.forEach(category => {
-            if(category.textContent.toLowerCase().includes(searchTerm)) {
+            if(searchTerm !== "" && category.textContent.toLowerCase().includes(searchTerm)) {
                 category.style.display = 'flex';
             } else {
                 category.style.display = 'none';
@@ -49,11 +47,13 @@ const FollowCategories = (props) => {
             })
         })
     }
+
+    console.log(user.categories);
+    console.log(categories);
     
     return (
-        <Card sx={{ p: 2, m:1, width: 500}}>
-            <Typography variant="h5">カテゴリーのフォロー</Typography>
-            <Paper component="form" sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}
+        <Box>
+            <Paper component="form" sx={{ p:'2px 4px', m:1, display:'flex', alignItems:'center' }}
                 onSubmit={searchCategories}>
                 <InputBase
                     fullWidth
@@ -69,10 +69,10 @@ const FollowCategories = (props) => {
             <Box component="form" onSubmit={() => console.log("a")}>
                 <List>
                     { categories.map((category) => (
-                        user.categories.includes(category.id) ? (
+                        user.categories.some(followCategory => followCategory.id === category.id) ? (
                             <div></div>
                         ) : (
-                            <ListItem sx={{ display:'none' }} disablePadding className="category-option">
+                            <ListItem sx={{ display:'none' }} disablePadding className="category-option" key={category.id}>
                                 <IconButton 
                                     sx={{ type:'submit' }}
                                     arial-label=""
@@ -89,7 +89,7 @@ const FollowCategories = (props) => {
                     ))}
                 </List>
             </Box>
-        </Card>
+        </Box>
     );
 }
 

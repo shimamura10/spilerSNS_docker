@@ -89,6 +89,14 @@ export default function Header({auth, header, children}) {
                                 <ListItemText primary="プロフィール" />
                             </ListItemButton>
                         </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to={route('category.create', {user: auth.user.id})}>
+                                <ListItemIcon>
+                                    <PersonIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="カテゴリー追加" />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Box>
             </Drawer>

@@ -74,7 +74,7 @@ const CreatePost = (props) => {
     console.log(data);
     // const watchBody = watch('body', '');
     
-    const handleSendPosts = (e) => {
+    const handleSendPost = (e) => {
         e.preventDefault();
         post(route("store"));
     }
@@ -153,7 +153,7 @@ const CreatePost = (props) => {
             }}
             noValidate
             autoComplete="off"
-            onSubmit={handleSendPosts}
+            onSubmit={handleSendPost}
         >
             <Typography variant="h4" sx={{ m: 1 }}>投稿作成</Typography>
             
