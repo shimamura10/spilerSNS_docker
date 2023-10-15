@@ -9,6 +9,7 @@ import FollowCategories from "@/Components/FollowCategories";
 
 const Mypage = (props) => {
     const { posts, categories } = props;
+    console.log(posts);
     
     const [ followingCategories, setFollowingCategories ] = useState(props.user.categories);
     const [ user, setUser ] = useState(props.user);
@@ -52,8 +53,11 @@ const Mypage = (props) => {
             </Card>
             
             <Box sx={{ display: 'flex' }}>
-                <TimeLine posts={ posts }/>
-                <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory}/>
+                <TimeLine posts={ posts } auth={ props.auth }/>
+                <Card sx={{ p: 2, m:1, width: 500}}>
+                    <Typography variant="h5">カテゴリーのフォロー</Typography>
+                    <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory}/>
+                </Card>
             </Box>
             
         </Header>

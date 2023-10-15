@@ -74,7 +74,7 @@ const CreatePost = (props) => {
     console.log(data);
     // const watchBody = watch('body', '');
     
-    const handleSendPosts = (e) => {
+    const handleSendPost = (e) => {
         e.preventDefault();
         post(route("store"));
     }
@@ -153,7 +153,7 @@ const CreatePost = (props) => {
             }}
             noValidate
             autoComplete="off"
-            onSubmit={handleSendPosts}
+            onSubmit={handleSendPost}
         >
             <Typography variant="h4" sx={{ m: 1 }}>投稿作成</Typography>
             
@@ -182,9 +182,9 @@ const CreatePost = (props) => {
                     <p>Drag 'n' drop some files here, or click to select files</p>
                     <em>(4 files are the maximum number of files you can drop here)</em>
                 </div>
-                <aside style={thumbsContainer}>
+                {/* <aside style={thumbsContainer}>
                     {thumbs}
-                </aside>
+                </aside> */}
             </Box>
             
             <ImageList sx={{ width: 482, m:1}} cols={2} variant="quilted" rowWidth={240} rowHeight={135}>
@@ -201,7 +201,7 @@ const CreatePost = (props) => {
             
             <Button variant="outlined" type="submit" sx={{ m:1 }}>送信</Button>
             
-            <Post author={auth.user} post={data} comments={0}/>
+            {/* <Post author={auth.user} post={data} comments={0}/> */}
         </Card>
   );
 }

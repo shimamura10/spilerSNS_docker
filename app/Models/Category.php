@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
     
     public function posts()
     {
@@ -15,6 +19,6 @@ class Category extends Model
     }
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('display');
     }
 }

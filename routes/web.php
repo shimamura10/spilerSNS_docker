@@ -44,6 +44,9 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
 
 Route::controller(CategoryController::class)->middleware(['auth'])->group(function(){
     Route::post('/follow/category', 'followCategory')->name('follow.category');
+    Route::get('/category/create', 'create')->name('category.create');
+    Route::post('/category/store', 'store')->name('category.store');
+    Route::put('/category/display', 'changeDisplay')->name('category.display');
 });
 
 Route::controller(CommentController::class)->middleware(['auth'])->group(function(){
