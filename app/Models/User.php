@@ -24,6 +24,8 @@ class User extends Authenticatable
         'message',
     ];
 
+    protected $with = ['categories'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -53,7 +55,7 @@ class User extends Authenticatable
     }
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class)->withPivot('display');
     }
     public function likePosts()
     {

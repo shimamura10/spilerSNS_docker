@@ -53,7 +53,6 @@ const TimeLine = (props) => {
             body: e.target.comment.value
         }).then((response) => {
         }).catch(error => {
-            console.log(error);
         })
     }
 
@@ -108,6 +107,7 @@ const TimeLine = (props) => {
         <Box>
             { posts.map((post) => (
                 <Card sx={{ p:2, m:1 }} key={post.id}>
+                    {/* ヘッダー */}
                     <Box sx={{ display:'flex', alignItems:'center', justifyContent: 'space-between' }}>
                         <Box sx={{ display:'flex', alignItems: 'center'}}>
                             <Avatar src={ post.author.icon_url } />
@@ -115,7 +115,9 @@ const TimeLine = (props) => {
                         </Box>
                         <Button variant="outlined">{ post.category.name }</Button>
                     </Box>
+                    {/* 本文 */}
                     <Typography sx={{ m:1 }} variant="body1">{ post.body }</Typography>
+                    {/* 画像 */}
                     <ImageList sx={{ m:1, width: 483 }} cols={2} rowHeight={135} variant="quilted">
                         {post.images.map((image) => (
                             <ImageListItem key={image.image_url}>
@@ -128,11 +130,14 @@ const TimeLine = (props) => {
                             </ImageListItem>
                         ))}
                     </ImageList>
+                    {/* いいね、コメント数 */}
                     <Box sx={{display: 'flex', alignItems: 'center'}} >
+                        {/* コメント数 */}
                         <Box sx={{display: 'flex', alignItems: 'center'}} >
                             <CommentIcon/>
                             <Typography sx={{ m:1 }}>{ post.comments.length }</Typography>
                         </Box>
+                        {/* いいね */}
                         <Box sx={{display: 'flex', alignItems: 'center'}} >
                             {
                                 (post.liked_by.find(like => like.id === auth.user.id)) ? (
@@ -163,6 +168,7 @@ const TimeLine = (props) => {
                         </Box>
                     </Box>
                     
+                    {/* コメント */}
                     <Divider />
                     <Button sx={{ width: "100%" }} variant="text" onClick={(e)=>displayComments(e, post.id)} id={`button${post.id}`}>コメントを表示する</Button>
                     

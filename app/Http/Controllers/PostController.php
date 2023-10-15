@@ -14,21 +14,21 @@ use Cloudinary;
 
 class PostController extends Controller
 {
-    public function mypage(User $user, Category $category)
+    public function mypage(User $user)
     {
-        $myposts = $user->posts->load(['comments.author', 'likedBy']);
-        return Inertia::render("Post/Mypage", ["posts" => $myposts, "user" => $user->load("categories"), "categories" => $category->get()]);
+        $myposts = Post::getDisplayPosts()->where('user_id', $user->id);
+        $myposts = [...$myposts];
+        return Inertia::render("Post/Mypage", ["posts" => $myposts, "user" => $user->load("categories"), "categories" => Category::all()]);
     }
     
-    public function home(Post $post, Category $category)
+    public function home()
     {
-        // dd($post->get()->load('comments.author'));
-        return Inertia::render("Post/Home", ["posts" => $post->orderBy('created_at', 'desc')->get()->load(['comments.author', 'likedBy']), "categories" => $category->get()]);
+        return Inertia::render("Post/Home", ["posts" => [ ...Post::getDisplayPosts() ], "categories" => Category::all()]);
     }
     
-    public function create(Category $category)
+    public function create()
     {
-        return Inertia::render("Post/CreatePost", ["categories" => $category->get()]);
+        return Inertia::render("Post/CreatePost", ["categories" => Category::all()]);
     }
     
     public function store(Request $request, Post $post)

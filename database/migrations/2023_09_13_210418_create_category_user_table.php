@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->primary(['category_id', 'user_id']);
+            $table->boolean('display')->default(true);
         });
     }
 

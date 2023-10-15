@@ -10,14 +10,14 @@ const getCsrfToken = () => {
     const metas = document.getElementsByTagName('meta');
     for (let meta of metas) {
         if (meta.getAttribute('name') === 'csrf-token') {
-            console.log(meta.getAttribute('content'));
+            // console.log(meta.getAttribute('content'));
             return meta.getAttribute('content');
         }
     }
     return '';
 }
 
-const FollowCategories = ({categories, user}) => {    
+const FollowCategories = ({categories, user, ...props}) => {    
     // 検索まわり
     const [ searchTerm, setSearchTerm ] = useState("");
     const searchCategories = (e) => {
@@ -47,9 +47,6 @@ const FollowCategories = ({categories, user}) => {
             })
         })
     }
-
-    console.log(user.categories);
-    console.log(categories);
     
     return (
         <Box>

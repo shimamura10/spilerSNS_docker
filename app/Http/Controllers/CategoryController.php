@@ -21,6 +21,15 @@ class CategoryController extends Controller
         return redirect(route("mypage", ["user" => $user_id]));
     }
 
+    public function changeDisplay(Request $request, Category $category)
+    {
+        $input = $request->all();
+        // dd($input['user_id']);
+        $user = User::find($input['user_id']);
+        $category = Category::find($input['category_id']);
+        $user->categories()->updateExistingPivot($category, ['display' => $input['display']]);
+    }
+
     public function create(Category $category, User $user) {
         return Inertia::render("Post/CategoryCreate", ["categories" => $category->get(), "user" => $user->load("categories")]);
     }
