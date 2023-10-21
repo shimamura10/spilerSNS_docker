@@ -161,17 +161,19 @@ const CreatePost = (props) => {
                 label="本文"
                 multiline
                 onChange={(e) => setData("body", e.target.value)}
+                required
                 // {...register('body')}
             />
             
             <FormControl>
                 <InputLabel>作品カテゴリー</InputLabel>
                 <Select label="作品カテゴリー" 
-                onChange={(e) => setData("category_id", e.target.value)}
-                // {...register('category_id')}
+                    onChange={(e) => setData("category_id", e.target.value)}
+                    required
+                    // {...register('category_id')}
                 >
-                    { categories.map((category) => (
-                      <MenuItem value={ category.id }>{ category.name }</MenuItem>  
+                    { auth.user.categories.map((category) => (
+                        <MenuItem value={ category.id }>{ category.name }</MenuItem>  
                     ))}
                 </Select>
             </FormControl>

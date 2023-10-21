@@ -36,12 +36,14 @@ class PostController extends Controller
         $input = $request->all();
         $post->fill($input)->save();
         
-        foreach($request->file('images') as $file) {
-            $image_url = Cloudinary::upload($file->getRealPath())->getSecurePath();
-            Image::create([
-                'post_id' => $post->id,
-                'image_url' => $image_url,
-            ]); 
+        if ($request->file('images')) {
+            foreach($request->file('images') as $file) {
+                $image_url = Cloudinary::upload($file->getRealPath())->getSecurePath();
+                Image::create([
+                    'post_id' => $post->id,
+                    'image_url' => $image_url,
+                ]); 
+            }
         }
         
         return redirect(route("home"));
