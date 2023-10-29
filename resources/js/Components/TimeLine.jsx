@@ -107,9 +107,9 @@ const TimeLine = (props) => {
     // ペジネーション
     const [page, setPage] = useState(props.posts.current_page);
     const pageChange = (e, value) => {
-        console.log(value);
+        // console.log(value);
         setPage(value);
-        console.log(props.posts.links.filter((link) => link.label == value)[0].url);
+        // console.log(props.posts.links.filter((link) => link.label == value)[0].url);
         axios.get(props.posts.links.filter((link) => link.label == value)[0].url).then((response) => {
             console.log(response);
         })
@@ -117,8 +117,6 @@ const TimeLine = (props) => {
     
     return (
         <Box>
-            <Link href={props.posts.next_page_url}>次へ</Link>
-            
             { posts.map((post) => (
                 <Card sx={{ p:2, m:1 }} key={post.id}>
                     {/* ヘッダー */}
@@ -212,9 +210,14 @@ const TimeLine = (props) => {
                     </Box>
                 </Card>
             )) }
-            <Stack spacing={2}>
+            {/* ペジネーション */}
+            <Box sx={{ display:'flex', justifyContent:'space-between', mx:3}} >
+                <Link href={props.posts.prev_page_url}>前へ</Link>
+                <Link href={props.posts.next_page_url}>次へ</Link>
+            </Box>
+            {/* <Stack spacing={2}>
                 <Pagination count={props.posts.last_page} page={page} onChange={pageChange} />
-            </Stack>
+            </Stack> */}
         </Box>
     );
 }

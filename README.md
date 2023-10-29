@@ -52,6 +52,8 @@ https://zenn.dev/forrep/articles/8c0304ad420c8e
 - [ ] もろもろバリデーション
 - [ ] `Deprecated: PHP Startup: Use of mbstring.internal_encoding is deprecated in Unknown on line 0`  
     - https://support.ntt.com/mw-premiumr3/faq/detail/pid2300001r2d/
+- [ ] user登録時にステータスメッセージを設定
+
 
 ## 日記
 ### 9/16
