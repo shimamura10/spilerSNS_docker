@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+require __DIR__ . '/../../../vendor/autoload.php';
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,19 +12,41 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Image;
 use Cloudinary;
+use Aws\Comprehend\ComprehendClient;
 
 class PostController extends Controller
 {
+    public function analyzeSentiment(String $text): string
+    {
+        $client = new ComprehendClient([
+            'region' => 'ap-northeast-1',
+            'version' => 'latest'
+        ]);
+
+        $result = $client->detectSentiment([
+            'LanguageCode' => 'ja', // REQUIRED
+            'Text' => $text, // REQUIRED
+        ]);
+        
+        $sentiment = $result->get('Sentiment');
+        // dd($sentiment);
+        return $sentiment;
+    }
+
     public function mypage(User $user)
     {
-        $myposts = Post::getDisplayPosts()->where('user_id', $user->id);
-        $myposts = [...$myposts];
+        // dd(Post::getDisplayPosts());
+        $myposts = Post::getDisplayPosts()->where('user_id', $user->id)->paginate(3);
+        // キーを連番になおす
+        // $myposts = [...$myposts];
+        // dd($myposts);
         return Inertia::render("Post/Mypage", ["posts" => $myposts, "user" => $user->load("categories"), "categories" => Category::all()]);
     }
     
     public function home()
     {
-        return Inertia::render("Post/Home", ["posts" => [ ...Post::getDisplayPosts() ], "categories" => Category::all()]);
+        $posts = Post::getDisplayPosts()->paginate(3);
+        return Inertia::render("Post/Home", ["posts" => $posts, "categories" => Category::all(), "next_url" => $posts->nextPageUrl()]);
     }
     
     public function create()
@@ -34,7 +57,12 @@ class PostController extends Controller
     public function store(Request $request, Post $post)
     {
         $input = $request->all();
-        $post->fill($input)->save();
+        // dd($input);
+        $post->fill($input);
+        $sentiment = $this->analyzeSentiment($input['body']);
+        $post->sentiment = $sentiment;
+        // dd($post);
+        $post->save();
         
         if ($request->file('images')) {
             foreach($request->file('images') as $file) {
@@ -42,7 +70,7 @@ class PostController extends Controller
                 Image::create([
                     'post_id' => $post->id,
                     'image_url' => $image_url,
-                ]); 
+                ]);
             }
         }
         

@@ -29,6 +29,7 @@ import Logout from '@mui/icons-material/Logout';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import { FormControlLabel, Switch } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -54,12 +55,23 @@ export default function Header({auth, header, children}) {
     console.log(displays);
     const changeDisplay = (e, category_id) => {
         const chengedDisplay = e.target.checked;  //putした後だとtarget.checkedがdisplaysで上書きされてしまうので、その前に保存しておく
-        axios.put(route('category.display'), {
+        axios.put(route('user.negative'), {
             display: e.target.checked,
             user_id: auth.user.id,
             category_id: category_id,
         }).then((response) => {
             setDisplays({ ...displays, [category_id]: chengedDisplay});
+        });
+    }
+
+    // NoNegativeモードの切り替え
+    const [noNegative, setNoNegative] = React.useState(auth.user.no_negative);
+    const changeNegative = (e) => {
+        const chengedValue = e.target.checked;
+        axios.put(route('user.negative'), {
+            no_negative: e.target.checked,
+        }).then((response) => {
+            setNoNegative(chengedValue);
         });
     }
 
@@ -123,6 +135,7 @@ export default function Header({auth, header, children}) {
                                 <ListItemText primary="カテゴリー追加" />
                             </ListItemButton>
                         </ListItem>
+                        {/* フォロー中のカテゴリー一覧 */}
                         <ListItem>
                             <List>
                                 { auth.user.categories.map((category) => (
@@ -138,6 +151,10 @@ export default function Header({auth, header, children}) {
                                     </ListItem>
                                 ))}
                             </List>
+                        </ListItem>
+                        {/* Noネガティブモード */}
+                        <ListItem>
+                            <FormControlLabel control={<Switch onChange={changeNegative} checked={noNegative}/>} label="No Negativeモード" />
                         </ListItem>
                     </List>
                 </Box>

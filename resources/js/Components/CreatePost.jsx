@@ -77,6 +77,7 @@ const CreatePost = (props) => {
     const handleSendPost = (e) => {
         e.preventDefault();
         post(route("store"));
+        window.location.reload();
     }
     
     const [files, setFiles] = useState([]);

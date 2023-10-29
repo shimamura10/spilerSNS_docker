@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'message',
+        'no_negative',
     ];
 
     protected $with = ['categories'];

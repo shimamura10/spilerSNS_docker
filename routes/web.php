@@ -19,14 +19,14 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -34,7 +34,7 @@ Route::get('/dashboard', function () {
 
 Route::controller(PostController::class)->middleware(['auth'])->group(function(){
     Route::get('/mypage/{user}', 'mypage')->name('mypage');
-    Route::get('/home', 'home')->name('home');
+    Route::get('/', 'home')->name('home');
     Route::get('/create', 'create')->name('create');
     Route::post('/create', 'store')->name('store');
     Route::post('/post/store/like', 'storeLike')->name('post.storeLike');
@@ -51,6 +51,10 @@ Route::controller(CategoryController::class)->middleware(['auth'])->group(functi
 
 Route::controller(CommentController::class)->middleware(['auth'])->group(function(){
     Route::post('/create/comment', 'create')->name('create.comment');
+});
+
+Route::controller(ProfileController::class)->middleware(['auth'])->group(function(){
+    Route::put('/user/negative', 'changeNoNegative')->name('user.negative');
 });
 
 Route::middleware('auth')->group(function () {

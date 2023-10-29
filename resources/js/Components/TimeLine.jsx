@@ -1,16 +1,17 @@
 import React, {useState} from "react";
 import axios from "axios";
-import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton} from '@mui/material';
+import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton, Stack, Pagination} from '@mui/material';
 import { spacing } from '@mui/system';
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { Link } from '@inertiajs/react';
 
 
 const TimeLine = (props) => {
     const { auth } = props;
-    const [ posts, setPosts ] = useState(props.posts);
-    console.log(posts);
+    const [ posts, setPosts ] = useState(props.posts.data);
+    console.log(props.posts);
 
     // コメントの表示・非表示の切り替え
     const displayComments = (e, id) => {
@@ -102,9 +103,22 @@ const TimeLine = (props) => {
             console.log(error);
         })
     }
+
+    // ペジネーション
+    const [page, setPage] = useState(props.posts.current_page);
+    const pageChange = (e, value) => {
+        console.log(value);
+        setPage(value);
+        console.log(props.posts.links.filter((link) => link.label == value)[0].url);
+        axios.get(props.posts.links.filter((link) => link.label == value)[0].url).then((response) => {
+            console.log(response);
+        })
+    }
     
     return (
         <Box>
+            <Link href={props.posts.next_page_url}>次へ</Link>
+            
             { posts.map((post) => (
                 <Card sx={{ p:2, m:1 }} key={post.id}>
                     {/* ヘッダー */}
@@ -198,6 +212,9 @@ const TimeLine = (props) => {
                     </Box>
                 </Card>
             )) }
+            <Stack spacing={2}>
+                <Pagination count={props.posts.last_page} page={page} onChange={pageChange} />
+            </Stack>
         </Box>
     );
 }

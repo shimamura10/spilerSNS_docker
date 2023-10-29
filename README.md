@@ -172,9 +172,13 @@ awsのドキュメントが読みづら過ぎてきれそう
 aws_session_tokenてなに～～  
 IAM Identity centerの認証情報取得方法  
 https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/howtogetcredentials.html#how-to-get-temp-credentials  
-MFAしてなければsession tokenはいらないっぽい？
+MFAしてなければsession tokenはいらないっぽい？  
 
 ### 10/21
 - aws comprehendのサンプルコードをphpで実行できた!!!!  
 awsアカウント持ってたからこれにしたけど他のサービスのほうが楽だったかも  
 awsに他のサービスもいっぱいあるせいで認証システムとか普通のweb apiよりかなり複雑だった
+
+### 10/29
+- aws comprehendにlaravelアプリケーションからアクセスできた  
+普通にサンプルコードと同じでいけると思ったけど認証情報の与え方を変えないといけなかった。もともと/root/.aws/に認証ファイルを作ってたけどlaravelアプリからホームディレクトリにアクセスできないらしい。.envファイルにアクセスキーとか書いたらいけた。もしかしてidentity centerの登録とかいらなかった？？

@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Cloudinary;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
+    public function changeNoNegative(Request $request) {
+        $user = User::find(Auth::user()->id);
+        $user['no_negative'] = $request->all()['no_negative'];
+        $user->save();
+    }
+
     /**
      * Display the user's profile form.
      */
