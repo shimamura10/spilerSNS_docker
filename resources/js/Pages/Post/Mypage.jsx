@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import Authenticated from "@/Layouts/AuthenticatedLayout";
 import Header from "@/Layouts/Header";
-import { Avatar, Card, Typography, Box, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemText} from '@mui/material';
-// import { ExpandMoreIcon } from '@mui/icons-material';
+import { Avatar, Card, Typography, Box, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemText, IconButton} from '@mui/material';
+import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TimeLine from "@/Components/TimeLine";
 import FollowCategories from "@/Components/FollowCategories";
@@ -16,18 +15,35 @@ const Mypage = (props) => {
     
     const addFollowingCategory = (id, name) => {
         // followingCategories.push({id:4, name:"ダンガンロンパ"})
-        setFollowingCategories([ ...followingCategories, {id:id, name:name}])
-        setUser({ ...user, categories: [ ...user.categories, {id:id, name:name}]})
+        setFollowingCategories([ ...followingCategories, {id:id, name:name}]);
+        setUser({ ...user, categories: [ ...user.categories, {id:id, name:name}]});
         // setFollowingCategories([ ...followingCategories, {id:4, name:"ダンガンロンパ"}])
         // console.log(followingCategories);
+    }
+
+    const deleteFollowingCategory = (id) => {
+        console.log(followingCategories);
+        console.log(followingCategories.filter((followingCategory) => followingCategory.id !== id));
+        setFollowingCategories([ ...followingCategories.filter((followingCategory) => followingCategory.id !== id) ]);
+        setUser({ ...user, categories: [ ...user.categories.filter((followingCategory) => followingCategory.id !== id) ]});
+    }
+
+    const unfollowCategory = (e, id) => {
+        axios.delete(route("follow.category"), {
+            data: {
+                category_id: id,
+            }
+        }).then((response) => {
+            deleteFollowingCategory(id);
+        });
     }
     
     return (
         <Header auth={props.auth} header={`${user.name}のマイページ`}>
-            <Card>
-                <Box sx={{ display:'flex', alignItems: 'center'}}>
-                    <Avatar src={ user.icon_ur } />
-                    <Typography variant="h5" sx={{ ml: 1 }}>{ user.name }</Typography>
+            <Card sx={{ p:2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
+                    <Avatar src={ user.icon_url } sx={{ width: 56, height: 56}}/>
+                    <Typography variant="h4" sx={{ ml: 1 }}>{ user.name }</Typography>
                 </Box>
                 <Typography>{ user.message }</Typography>
                 <Accordion>
@@ -56,7 +72,22 @@ const Mypage = (props) => {
                 <TimeLine posts={ posts } auth={ props.auth }/>
                 <Card sx={{ p: 2, m:1, width: 500}}>
                     <Typography variant="h5">カテゴリーのフォロー</Typography>
-                    <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory}/>
+                    <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory} unfollowCategory={unfollowCategory}/>
+                    <Typography variant="h5">フォロー中のカテゴリー</Typography>
+                    <List>
+                        { user.categories.map((category) => (
+                            <ListItem disablePadding key={category.id}>
+                                <IconButton 
+                                    arial-label=""
+                                    size="small"
+                                    onClick={(e) => unfollowCategory(e, category.id)}
+                                >
+                                    <PlaylistRemoveIcon sx={{ color: '#3291a8' }}/>
+                                </IconButton>
+                                <ListItemText primary={ category.name }/>
+                            </ListItem>
+                        )) }
+                    </List>
                 </Card>
             </Box>
             

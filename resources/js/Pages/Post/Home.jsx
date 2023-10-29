@@ -10,7 +10,7 @@ const Home = (props) => {
     return (
         <Header auth={props.auth} header="ホーム">
             
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <TimeLine posts={ posts } auth={ props.auth } next_url={ next_url }/>
                 <CreatePost categories={ categories } auth={ props.auth }/>
             </Box>

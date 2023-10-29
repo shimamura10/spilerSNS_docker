@@ -154,7 +154,6 @@ const TimeLine = (props) => {
                             {
                                 (post.liked_by.find(like => like.id === auth.user.id)) ? (
                                     <IconButton 
-                                        sx={{ type:'submit' }}
                                         arial-label=""
                                         size="small"
                                         // value={category.id}
@@ -165,7 +164,6 @@ const TimeLine = (props) => {
                                     </IconButton>
                                 ) : (
                                     <IconButton 
-                                        sx={{ type:'submit' }}
                                         arial-label=""
                                         size="small"
                                         // value={category.id}
@@ -211,9 +209,17 @@ const TimeLine = (props) => {
                 </Card>
             )) }
             {/* ペジネーション */}
-            <Box sx={{ display:'flex', justifyContent:'space-between', mx:3}} >
-                <Link href={props.posts.prev_page_url}>前へ</Link>
-                <Link href={props.posts.next_page_url}>次へ</Link>
+            <Box sx={{ display:'flex', justifyContent:'space-between'}} >
+                {
+                    props.posts.prev_page_url? (
+                        <Link href={props.posts.prev_page_url} className="mx-12 text-xl text-blue-600 underline">前へ</Link>
+                    ) : (<div></div>)
+                }
+                {
+                    props.posts.next_page_url? (
+                        <Link href={props.posts.next_page_url} className="mx-12 text-xl text-blue-600 underline">次へ</Link>
+                    ) : (<div></div>)
+                }
             </Box>
             {/* <Stack spacing={2}>
                 <Pagination count={props.posts.last_page} page={page} onChange={pageChange} />

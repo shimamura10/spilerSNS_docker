@@ -36,7 +36,7 @@ class PostController extends Controller
     public function mypage(User $user)
     {
         // dd(Post::getDisplayPosts());
-        $myposts = Post::getDisplayPosts()->where('user_id', $user->id)->paginate(3);
+        $myposts = Post::getDisplayPosts()->where('user_id', $user->id)->paginate(30);
         // キーを連番になおす
         // $myposts = [...$myposts];
         // dd($myposts);

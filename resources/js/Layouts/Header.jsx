@@ -55,7 +55,7 @@ export default function Header({auth, header, children}) {
     console.log(displays);
     const changeDisplay = (e, category_id) => {
         const chengedDisplay = e.target.checked;  //putした後だとtarget.checkedがdisplaysで上書きされてしまうので、その前に保存しておく
-        axios.put(route('user.negative'), {
+        axios.put(route('category.display'), {
             display: e.target.checked,
             user_id: auth.user.id,
             category_id: category_id,
@@ -72,6 +72,7 @@ export default function Header({auth, header, children}) {
             no_negative: e.target.checked,
         }).then((response) => {
             setNoNegative(chengedValue);
+            window.location.reload();
         });
     }
 
@@ -124,7 +125,7 @@ export default function Header({auth, header, children}) {
                                 <ListItemIcon>
                                     <PersonIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="プロフィール" />
+                                <ListItemText primary="マイページ" />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>

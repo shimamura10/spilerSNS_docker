@@ -10,7 +10,7 @@ $client = new ComprehendClient([
 
 $result = $client->detectSentiment([
     'LanguageCode' => 'ja', // REQUIRED
-    'Text' => '私はとても楽しいです', // REQUIRED
+    'Text' => '続きが気になる', // REQUIRED
 ]);
 
 echo $result;
