@@ -46,7 +46,7 @@ const Mypage = (props) => {
                     <Typography variant="h4" sx={{ ml: 1 }}>{ user.name }</Typography>
                 </Box>
                 <Typography>{ user.message }</Typography>
-                <Accordion>
+                {/* <Accordion>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
@@ -65,10 +65,10 @@ const Mypage = (props) => {
                             )) }
                         </List>
                     </AccordionDetails>
-                </Accordion>
+                </Accordion> */}
             </Card>
             
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-around'}}>
                 <TimeLine posts={ posts } auth={ props.auth }/>
                 <Card sx={{ p: 2, m:1, width: 500}}>
                     <Typography variant="h5">カテゴリーのフォロー</Typography>

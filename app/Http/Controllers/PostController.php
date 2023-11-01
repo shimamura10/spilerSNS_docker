@@ -45,7 +45,7 @@ class PostController extends Controller
     
     public function home()
     {
-        $posts = Post::getDisplayPosts()->paginate(3);
+        $posts = Post::getDisplayPosts()->paginate(30);
         return Inertia::render("Post/Home", ["posts" => $posts, "categories" => Category::all(), "next_url" => $posts->nextPageUrl()]);
     }
     

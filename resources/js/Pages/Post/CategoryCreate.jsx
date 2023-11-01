@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Header from "@/Layouts/Header";
-import TimeLine from "@/Components/TimeLine";
-import CreatePost from "@/Components/CreatePost";
-import { Box, Button, Card, FormControl, FormControlLabel, FormGroup, TextField, Typography,Checkbox, Divider } from '@mui/material';
+import { Button, Card, FormControl, FormControlLabel, FormGroup, TextField, Typography,Checkbox } from '@mui/material';
 import FollowCategories from "@/Components/FollowCategories";
-import { CheckBox } from "@mui/icons-material";
 import { useForm } from "@inertiajs/react";
 
 

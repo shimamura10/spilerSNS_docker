@@ -50,26 +50,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                     <InputError className="mt-2" message={errors.name} />
                 </div>
-                
-                <div>
-                    <InputLabel value="Icon" />
-                    
-                    <IconInput onChange={(e) => setData("icon_file", e.target.files[0])}/>
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="message" value="Status Message" />
-
-                    <textarea
-                        id="message"
-                        className="mt-1 block w-full"
-                        value={data.message}
-                        onChange={(e) => setData('message', e.target.value)}
-                        placeholder="自己紹介文を書こう！"
-                    />
-                    
-                    <InputError className="mt-2" message={errors.message} />
-                </div>
 
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
@@ -85,6 +65,26 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+                
+                <div>
+                    <InputLabel value="Icon" />
+                    
+                    <IconInput onChange={(e) => setData("icon_file", e.target.files[0])} user={user}/>
+                </div>
+
+                <div>
+                    <InputLabel value="Status Message" />
+
+                    <textarea
+                        id="message"
+                        className="mt-1 block w-full"
+                        value={data.message}
+                        onChange={(e) => setData('message', e.target.value)}
+                        placeholder="自己紹介文を書こう！"
+                    />
+                    
+                    <InputError className="mt-2" message={errors.message} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

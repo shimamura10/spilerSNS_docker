@@ -36,23 +36,29 @@ https://yanamura.hatenablog.com/entry/2017/05/12/094103
 https://www.engilaboo.com/laravel-react-csrf/  
 エラーが500になったが余計原因がわからず詰み  
 SQLのリレーションミスってただけだった()
-- [ ] ログインボタンを二回押さないとdashboardに遷移しない
-- [ ] git操作で作成されたファイルに書き込めない！！！  
+- [x] ログインボタンを二回押さないとdashboardに遷移しない  
+原因不明だが発生しなくなった
+- [x] git操作で作成されたファイルに書き込めない！！！  
 mergeしたりbranch移動したりで作成され直したファイルの所有者がrootユーザーになっていてpermission deniedされる  
 普通にvscodeから作成したファイルは所有者が1000になってるので、rootユーザーが作成したファイルには書き込む権限がないのだろう。  
 ユーザーまわりわかんなすぎる...  
 ファイルをコピーして所有者を1000にすることで一時的な対処とします  
 下記サイトを参考にDockerfileをいじってコンテナのデフォルトユーザーを変えてみたけど変わらずrootユーザーが作成してた  
 https://zenn.dev/forrep/articles/8c0304ad420c8e  
-デフォルトユーザーの変更には成功したが、nodeのインストールをrootで行っているせいでnpm系のコマンドが実行できなくなった
-- [ ] ユーザー作成時に登録したアイコンが適用されない
-- [ ] カテゴリーフォローで419。リロードでなおる
+デフォルトユーザーの変更には成功したが、nodeのインストールをrootで行っているせいでnpm系のコマンドが実行できなくなった  
+根が深そうなのでファイルのコピペで対応
+- [x] ユーザー作成時に登録したアイコンが適用されない  
+icon_urlがfillable
+- [x] カテゴリーフォローで419。リロードでなおる  
+fetchではなくaxiosにしたらでなくなった
 - [x] 投稿時の作品カテゴリーがフォローしてないのもでる
-- [ ] 投稿時にリロードしたい
+- [ ] 投稿時にリロードしたい  
+投稿をaxiosにしてthenでリロードすれば良さそう
 - [ ] もろもろバリデーション
 - [ ] `Deprecated: PHP Startup: Use of mbstring.internal_encoding is deprecated in Unknown on line 0`  
     - https://support.ntt.com/mw-premiumr3/faq/detail/pid2300001r2d/
-- [ ] user登録時にステータスメッセージを設定
+- [x] user登録時にステータスメッセージを設定
+- [ ] 投稿の改行が反映されない
 
 
 ## 日記

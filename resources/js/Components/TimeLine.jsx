@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import axios from "axios";
-import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton, Stack, Pagination} from '@mui/material';
+import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton, Stack, Pagination, Chip, Link} from '@mui/material';
 import { spacing } from '@mui/system';
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Link } from '@inertiajs/react';
+// import { Link } from '@inertiajs/react';
 
 
 const TimeLine = (props) => {
@@ -115,17 +115,28 @@ const TimeLine = (props) => {
         })
     }
     
+    if (posts.length === 0) {
+        return (
+            <Box>
+                <Card sx={{ p:2, m:1, width:500 }}>
+                    <p>表示可能な投稿がありません</p>
+                    <p>まずは<Link href={ route("mypage", {user: auth.user.id}) }>マイページ</Link>から作品カテゴリーをフォローしましょう</p>
+                </Card>
+            </Box>
+        );
+    }
     return (
         <Box>
             { posts.map((post) => (
-                <Card sx={{ p:2, m:1 }} key={post.id}>
+                <Card sx={{ p:2, m:1, width:500 }} key={post.id}>
                     {/* ヘッダー */}
                     <Box sx={{ display:'flex', alignItems:'center', justifyContent: 'space-between' }}>
                         <Box sx={{ display:'flex', alignItems: 'center'}}>
                             <Avatar src={ post.author.icon_url } />
                             <Typography variant="h5" sx={{ ml: 1 }}>{ post.author.name }</Typography>
                         </Box>
-                        <Button variant="outlined">{ post.category.name }</Button>
+                        <Chip label={post.category.name} variant="outlined" color="primary"/>
+                        {/* <Button variant="outlined">{ post.category.name }</Button> */}
                     </Box>
                     {/* 本文 */}
                     <Typography sx={{ m:1 }} variant="body1">{ post.body }</Typography>
