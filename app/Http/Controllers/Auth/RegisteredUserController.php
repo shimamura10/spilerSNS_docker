@@ -43,6 +43,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'message' => $request->message? $requst->message : '',
         ];
+        
         if ($request->file('icon_file')) {
             $icon_url = Cloudinary::upload($request->file('icon_file')->getRealPath())->getSecurePath();
             $input["icon_url"] = $icon_url;

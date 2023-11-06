@@ -72,15 +72,13 @@ const CreatePost = (props) => {
         body: "",
         images: undefined,
     })
-    console.log(data);
-    // const watchBody = watch('body', '');
     
     const handleSendPost = (e) => {
         e.preventDefault();
-        // post(route("store"));
-        axios.post(route("store"), data).then((response) => {
-            window.location.reload();
-        });
+        post(route("store"));
+        // axios.post(route("store"), data).then((response) => {
+        //     window.location.reload();
+        // }).catch((error) => {console.log(error);});
     }
     
     const [files, setFiles] = useState([]);
@@ -148,17 +146,21 @@ const CreatePost = (props) => {
 
     return (
         <Card
-            component="form"
             sx={{
                 // '& .MuiTextField-root': { m: 1, width: '50ch' },
                 '& .MuiFormControl-root': { m: 1, width: '50ch' },
                 m:1,
-                p:2
+                p:2,
+                width:550,
+                height:"100%",
             }}
-            noValidate
-            autoComplete="off"
-            onSubmit={handleSendPost}
         >
+            <Box
+                component="form"
+                // noValidate
+                autoComplete="off"
+                onSubmit={handleSendPost}
+            >
             <Typography variant="h4" sx={{ m: 1 }}>投稿作成</Typography>
             
             <TextField
@@ -215,6 +217,7 @@ const CreatePost = (props) => {
             </Box>
             
             {/* <Post author={auth.user} post={data} comments={0}/> */}
+            </Box>
         </Card>
   );
 }

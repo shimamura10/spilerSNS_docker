@@ -57,11 +57,9 @@ class PostController extends Controller
     public function store(Request $request, Post $post)
     {
         $input = $request->all();
-        // dd($input);
         $post->fill($input);
         $sentiment = $this->analyzeSentiment($input['body']);
         $post->sentiment = $sentiment;
-        // dd($post);
         $post->save();
         
         if ($request->file('images')) {
