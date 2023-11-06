@@ -12,16 +12,22 @@ use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
-    public function followCategory(Request $request, Category $category)
+    public function followCategory(Request $request)
     {
         $user_id = Auth::user()->id;
         $category = Category::find($request->input('category_id'));
         $category->users()->attach($user_id);
-        
-        return redirect(route("mypage", ["user" => $user_id]));
     }
 
-    public function changeDisplay(Request $request, Category $category)
+    public function unfollowCategory(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $category = Category::find($request->input('category_id'));
+        // dd($category);
+        $category->users()->detach($user_id);
+    }
+
+    public function changeDisplay(Request $request)
     {
         $input = $request->all();
         // dd($input['user_id']);

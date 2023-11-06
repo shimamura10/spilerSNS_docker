@@ -36,7 +36,30 @@ https://yanamura.hatenablog.com/entry/2017/05/12/094103
 https://www.engilaboo.com/laravel-react-csrf/  
 エラーが500になったが余計原因がわからず詰み  
 SQLのリレーションミスってただけだった()
-- [ ] ログインボタンを二回押さないとdashboardに遷移しない
+- [x] ログインボタンを二回押さないとdashboardに遷移しない  
+原因不明だが発生しなくなった
+- [x] git操作で作成されたファイルに書き込めない！！！  
+mergeしたりbranch移動したりで作成され直したファイルの所有者がrootユーザーになっていてpermission deniedされる  
+普通にvscodeから作成したファイルは所有者が1000になってるので、rootユーザーが作成したファイルには書き込む権限がないのだろう。  
+ユーザーまわりわかんなすぎる...  
+ファイルをコピーして所有者を1000にすることで一時的な対処とします  
+下記サイトを参考にDockerfileをいじってコンテナのデフォルトユーザーを変えてみたけど変わらずrootユーザーが作成してた  
+https://zenn.dev/forrep/articles/8c0304ad420c8e  
+デフォルトユーザーの変更には成功したが、nodeのインストールをrootで行っているせいでnpm系のコマンドが実行できなくなった  
+根が深そうなのでファイルのコピペで対応
+- [x] ユーザー作成時に登録したアイコンが適用されない  
+icon_urlがfillable
+- [x] カテゴリーフォローで419。リロードでなおる  
+fetchではなくaxiosにしたらでなくなった
+- [x] 投稿時の作品カテゴリーがフォローしてないのもでる
+- [ ] 投稿時にリロードしたい  
+投稿をaxiosにしてthenでリロードすれば良さそう
+- [ ] もろもろバリデーション
+- [ ] `Deprecated: PHP Startup: Use of mbstring.internal_encoding is deprecated in Unknown on line 0`  
+    - https://support.ntt.com/mw-premiumr3/faq/detail/pid2300001r2d/
+- [x] user登録時にステータスメッセージを設定
+- [ ] 投稿の改行が反映されない
+
 
 ## 日記
 ### 9/16
@@ -123,5 +146,52 @@ git branchで何も出力されないとかあるんだね。
 - TLに表示する投稿のカテゴリーを制限する。  
 mapは連想配列には使えない！！  
 エラー原因がかなりはっきりしてたし学びもあったので初めてQiitaに投稿してみた
-https://qiita.com/shima10/items/ec0502c972515c9c366c
+https://qiita.com/shima10/items/ec0502c972515c9c366c  
 わりと時間かかってだるかった。良記事を投稿してくれてる先人に感謝。
+
+### 10/16
+- 感情分析どうやるか検討  
+    - ローカルで実行  
+    GPUのメモリ足りなくて無理そう。Herokeにアップロードしたらまず無理。
+    - Google ColaboratoryをAPIサーバー化  
+    90分アクセスが無いor12時間立ち上げっぱなしでセッション終了されるらしくてめんどそう。ライブラリとかも全部消えるらしい。  
+    日次処理的な感じにすればいけるのでは？？
+    - Amazon ComprehendとかGoogle Cloud Natural LanguageとかのAPIを使う  
+    料金発生する可能性がある  
+- Google ColaboratoryをAPIサーバーにする  
+flask + ngrokでできるらしい  
+デフォルトだとurlが毎回変わるが固定できるようになったらしい  
+https://qiita.com/youtoy/items/8a79d6954bb37f935f1b  
+90分問題はバッチ処理にすれば解決しそうだが12時間問題は解決しない  
+かなり力技で解決してる人もいた。インスタンスを二個用意して渡り歩かせてる。おもろ
+https://qiita.com/shoyaokayama/items/8869b7dda6deff017046  
+colabもGASみたいに定時実行させてくれ～  
+これ全部やるのは時間足らなそ～  
+いったん普通のapi使うか
+
+### 10/19, 20
+- amazon comprehendをローカルのPHPから実行する
+    - AWS IAM Identity Centerを設定する  
+    https://docs.aws.amazon.com/singlesignon/latest/userguide/getting-started.html
+    - aws sdkのインストール (https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/getting-started_installation.html)
+awsのドキュメントが読みづら過ぎてきれそう  
+認証情報のファイルどこに置くんだ？vendor/aws/configとvendor/aws/credentialsを作ったけど合ってるのか？  
+  - /root/.awsの下だった。
+aws_session_tokenてなに～～  
+IAM Identity centerの認証情報取得方法  
+https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/howtogetcredentials.html#how-to-get-temp-credentials  
+MFAしてなければsession tokenはいらないっぽい？  
+
+### 10/21
+- aws comprehendのサンプルコードをphpで実行できた!!!!  
+awsアカウント持ってたからこれにしたけど他のサービスのほうが楽だったかも  
+awsに他のサービスもいっぱいあるせいで認証システムとか普通のweb apiよりかなり複雑だった
+
+### 10/29
+- aws comprehendにlaravelアプリケーションからアクセスできた  
+普通にサンプルコードと同じでいけると思ったけど認証情報の与え方を変えないといけなかった。もともと/root/.aws/に認証ファイルを作ってたけどlaravelアプリからホームディレクトリにアクセスできないらしい。.envファイルにアクセスキーとか書いたらいけた。もしかしてidentity centerの登録とかいらなかった？？
+- スクリプトからリロード  
+`window.location.reload();`
+
+### 10/30
+- axios.delete

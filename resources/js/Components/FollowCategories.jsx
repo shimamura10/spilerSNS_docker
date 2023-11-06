@@ -1,21 +1,22 @@
 import React, {useState} from "react";
-import { useForm } from '@inertiajs/react';
-import { Card, List, ListItem, ListItemButton, ListItemText, Box, Button, IconButton, Typography, Paper, InputBase } from '@mui/material';
+import { List, ListItem, ListItemText, Box, IconButton, Typography, Paper, InputBase } from '@mui/material';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import SearchIcon from '@mui/icons-material/Search';
-import 'whatwg-fetch'
+import 'whatwg-fetch';
+import axios from "axios";
 
 
-const getCsrfToken = () => {
-    const metas = document.getElementsByTagName('meta');
-    for (let meta of metas) {
-        if (meta.getAttribute('name') === 'csrf-token') {
-            // console.log(meta.getAttribute('content'));
-            return meta.getAttribute('content');
-        }
-    }
-    return '';
-}
+// const getCsrfToken = () => {
+//     const metas = document.getElementsByTagName('meta');
+//     for (let meta of metas) {
+//         if (meta.getAttribute('name') === 'csrf-token') {
+//             // console.log(meta.getAttribute('content'));
+//             return meta.getAttribute('content');
+//         }
+//     }
+//     return '';
+// }
 
 const FollowCategories = ({categories, user, ...props}) => {    
     // 検索まわり
@@ -34,18 +35,55 @@ const FollowCategories = ({categories, user, ...props}) => {
     
     // カテゴリーのフォローボタンを押したときの処理
     const followCategory = (e, id, name) => {
-        props.addFollowingCategory(id, name);
-        window.fetch(route("follow.category"), {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': getCsrfToken()
-            },
-                body: JSON.stringify({
-                    category_id: id,
-            })
-        })
+        // window.fetch(route("follow.category"), {
+        //     method: 'POST',
+        //     credentials: 'same-origin',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRF-Token': getCsrfToken()
+        //     },
+        //         body: JSON.stringify({
+        //             category_id: id,
+        //     })
+        // })
+        axios.post(route("follow.category"), {
+            category_id: id,
+        }).then((response) => {
+            props.addFollowingCategory(id, name);
+        });
+    }
+
+    // const unfollowCategory = (e, id) => {
+    //     axios.delete(route("follow.category"), {
+    //         data: {
+    //             category_id: id,
+    //         }
+    //     });
+    // }
+
+    const createFollowButton = (categoryId, categoryName) => {
+        if (!props.addFollowingCategory) { return (<div></div>)}
+        if (user.categories.some(followCategory => followCategory.id === categoryId)) {
+            return (
+                <IconButton 
+                    arial-label=""
+                    size="small"
+                    onClick={(e) => props.unfollowCategory(e, categoryId)}
+                >
+                    <PlaylistRemoveIcon sx={{ color: '#3291a8' }}/>
+                </IconButton>
+            );
+        } else {
+            return (
+                <IconButton 
+                    arial-label=""
+                    size="small"
+                    onClick={(e) => followCategory(e, categoryId, categoryName)}
+                >
+                    <PlaylistAddIcon sx={{ color: '#a84032' }}/>
+                </IconButton>
+            );
+        }
     }
     
     return (
@@ -63,26 +101,13 @@ const FollowCategories = ({categories, user, ...props}) => {
                     <SearchIcon/>
                 </IconButton>
             </Paper>
-            <Box component="form" onSubmit={() => console.log("a")}>
+            <Box>
                 <List>
                     { categories.map((category) => (
-                        user.categories.some(followCategory => followCategory.id === category.id) ? (
-                            <div></div>
-                        ) : (
-                            <ListItem sx={{ display:'none' }} disablePadding className="category-option" key={category.id}>
-                                <IconButton 
-                                    sx={{ type:'submit' }}
-                                    arial-label=""
-                                    size="small"
-                                    // value={category.id}
-                                    // onClick={handleSendData}
-                                    onClick={(e) => followCategory(e, category.id, category.name)}
-                                >
-                                    <PlaylistAddIcon sx={{ pointerEvents: 'none' }}/>
-                                </IconButton>
-                                <ListItemText sx={{ml:1}}primary={ category.name }/>
-                            </ListItem>
-                        )
+                        <ListItem sx={{ display:'none' }} disablePadding className="category-option" key={category.id}>
+                            { createFollowButton(category.id, category.name) }
+                            <ListItemText sx={{ml:1}}primary={ category.name }/>
+                        </ListItem>
                     ))}
                 </List>
             </Box>

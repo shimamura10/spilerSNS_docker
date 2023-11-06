@@ -14,6 +14,7 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         icon_file: undefined,
+        message: '',
     });
     console.log(data);
 
@@ -53,12 +54,6 @@ export default function Register() {
                     />
 
                     <InputError message={errors.name} className="mt-2" />
-                </div>
-                
-                <div>
-                    <h2>アイコン</h2>
-
-                    <IconInput onChange={(e) => setData("icon_file", e.target.files[0])}/>
                 </div>
 
                 <div className="mt-4">
@@ -110,6 +105,26 @@ export default function Register() {
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
+                </div>
+
+                <div className='mt-4'>
+                    <InputLabel value="Icon" />
+                    <IconInput onChange={(e) => setData("icon_file", e.target.files[0])}/>
+                </div>
+
+                <div className='mt-4'>
+                    <InputLabel value="Status Message" />
+
+                    <textarea
+                        id="message"
+                        className="mt-1 block w-full"
+                        name='message'
+                        value={data.message}
+                        onChange={(e) => setData('message', e.target.value)}
+                        placeholder="自己紹介文を書こう！"
+                    />
+                    
+                    <InputError className="mt-2" message={errors.message} />
                 </div>
 
                 <div className="flex items-center justify-end mt-4">

@@ -29,6 +29,7 @@ import Logout from '@mui/icons-material/Logout';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import { Button, FormControlLabel, Switch } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -61,6 +62,22 @@ export default function Header({auth, header, children}) {
         }).then((response) => {
             setDisplays({ ...displays, [category_id]: chengedDisplay});
         });
+    }
+
+    // NoNegativeモードの切り替え
+    const [noNegative, setNoNegative] = React.useState(auth.user.no_negative);
+    const changeNegative = (e) => {
+        const chengedValue = e.target.checked;
+        axios.put(route('user.negative'), {
+            no_negative: e.target.checked,
+        }).then((response) => {
+            setNoNegative(chengedValue);
+            window.location.reload();
+        });
+    }
+
+    const reload = () => {
+        window.location.reload();
     }
 
     return (
@@ -112,21 +129,23 @@ export default function Header({auth, header, children}) {
                                 <ListItemIcon>
                                     <PersonIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="プロフィール" />
+                                <ListItemText primary="マイページ" />
                             </ListItemButton>
                         </ListItem>
-                        <ListItem disablePadding>
+                        {/* <ListItem disablePadding>
                             <ListItemButton component={Link} to={route('category.create', {user: auth.user.id})}>
                                 <ListItemIcon>
                                     <PersonIcon/>
                                 </ListItemIcon>
                                 <ListItemText primary="カテゴリー追加" />
                             </ListItemButton>
-                        </ListItem>
-                        <ListItem>
-                            <List>
+                        </ListItem> */}
+                        <Typography variant='h5' sx={{ml:2, mt:1}}>表示設定</Typography>
+                        {/* フォロー中のカテゴリー一覧 */}
+                        <ListItem sx={{py:0}}>
+                            <List sx={{py:0}}>
                                 { auth.user.categories.map((category) => (
-                                    <ListItem key={category.id}>
+                                    <ListItem key={category.id} sx={{ p:0 }}>
                                         <Checkbox 
                                             color='default' 
                                             icon={<VisibilityOffIcon/>} 
@@ -139,10 +158,17 @@ export default function Header({auth, header, children}) {
                                 ))}
                             </List>
                         </ListItem>
+                        {/* Noネガティブモード */}
+                        <ListItem>
+                            <FormControlLabel control={<Switch onChange={changeNegative} checked={noNegative}/>} label="No Negativeモード" />
+                        </ListItem>
                     </List>
+                    <Box sx={{display:'flex', justifyContent:'flex-end', mr:2}}>
+                        <Button onClick={reload} sx={{pl:'auto'}} variant='contained'>更新</Button>
+                    </Box>
                 </Box>
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: '#bae0e0' }}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: '#bae0e0', minHeight: 2000 }}>
                 <Toolbar />
                 {children}
             </Box>

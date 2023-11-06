@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('category_id')->constrained();
             $table->string('body', 400);
+            // $table->integer('negative_score')->default(0);
+            $table->string('sentiment')->default('');
             $table->timestamps();
         });
     }

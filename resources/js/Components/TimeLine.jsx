@@ -1,16 +1,17 @@
 import React, {useState} from "react";
 import axios from "axios";
-import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton} from '@mui/material';
+import { Avatar, Container, Card, Typography, Box, Button, ImageList, ImageListItem, Divider, TextField, IconButton, Stack, Pagination, Chip, Link} from '@mui/material';
 import { spacing } from '@mui/system';
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+// import { Link } from '@inertiajs/react';
 
 
 const TimeLine = (props) => {
     const { auth } = props;
-    const [ posts, setPosts ] = useState(props.posts);
-    console.log(posts);
+    const [ posts, setPosts ] = useState(props.posts.data);
+    console.log(props.posts);
 
     // コメントの表示・非表示の切り替え
     const displayComments = (e, id) => {
@@ -102,18 +103,40 @@ const TimeLine = (props) => {
             console.log(error);
         })
     }
+
+    // ペジネーション
+    const [page, setPage] = useState(props.posts.current_page);
+    const pageChange = (e, value) => {
+        // console.log(value);
+        setPage(value);
+        // console.log(props.posts.links.filter((link) => link.label == value)[0].url);
+        axios.get(props.posts.links.filter((link) => link.label == value)[0].url).then((response) => {
+            console.log(response);
+        })
+    }
     
+    if (posts.length === 0) {
+        return (
+            <Box>
+                <Card sx={{ p:2, m:1, width:500 }}>
+                    <p>表示可能な投稿がありません</p>
+                    <p>まずは<Link href={ route("mypage", {user: auth.user.id}) }>マイページ</Link>から作品カテゴリーをフォローしましょう</p>
+                </Card>
+            </Box>
+        );
+    }
     return (
         <Box>
             { posts.map((post) => (
-                <Card sx={{ p:2, m:1 }} key={post.id}>
+                <Card sx={{ p:2, m:1, width:500 }} key={post.id}>
                     {/* ヘッダー */}
                     <Box sx={{ display:'flex', alignItems:'center', justifyContent: 'space-between' }}>
                         <Box sx={{ display:'flex', alignItems: 'center'}}>
                             <Avatar src={ post.author.icon_url } />
                             <Typography variant="h5" sx={{ ml: 1 }}>{ post.author.name }</Typography>
                         </Box>
-                        <Button variant="outlined">{ post.category.name }</Button>
+                        <Chip label={post.category.name} variant="outlined" color="primary"/>
+                        {/* <Button variant="outlined">{ post.category.name }</Button> */}
                     </Box>
                     {/* 本文 */}
                     <Typography sx={{ m:1 }} variant="body1">{ post.body }</Typography>
@@ -142,7 +165,6 @@ const TimeLine = (props) => {
                             {
                                 (post.liked_by.find(like => like.id === auth.user.id)) ? (
                                     <IconButton 
-                                        sx={{ type:'submit' }}
                                         arial-label=""
                                         size="small"
                                         // value={category.id}
@@ -153,7 +175,6 @@ const TimeLine = (props) => {
                                     </IconButton>
                                 ) : (
                                     <IconButton 
-                                        sx={{ type:'submit' }}
                                         arial-label=""
                                         size="small"
                                         // value={category.id}
@@ -198,6 +219,22 @@ const TimeLine = (props) => {
                     </Box>
                 </Card>
             )) }
+            {/* ペジネーション */}
+            <Box sx={{ display:'flex', justifyContent:'space-between'}} >
+                {
+                    props.posts.prev_page_url? (
+                        <Link href={props.posts.prev_page_url} className="mx-12 text-xl text-blue-600 underline">前へ</Link>
+                    ) : (<div></div>)
+                }
+                {
+                    props.posts.next_page_url? (
+                        <Link href={props.posts.next_page_url} className="mx-12 text-xl text-blue-600 underline">次へ</Link>
+                    ) : (<div></div>)
+                }
+            </Box>
+            {/* <Stack spacing={2}>
+                <Pagination count={props.posts.last_page} page={page} onChange={pageChange} />
+            </Stack> */}
         </Box>
     );
 }

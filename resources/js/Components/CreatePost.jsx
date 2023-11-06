@@ -2,7 +2,8 @@ import React, {useEffect, useState, useMemo} from "react";
 import Post from "@/Components/Post";
 import { useForm } from '@inertiajs/react';
 import { useDropzone } from 'react-dropzone';
-import { Card, Typography, Box, Button, ImageList, ImageListItem, TextField, Select, MenuItem, FormControl, InputLabel} from '@mui/material';
+import { Link, Card, Typography, Box, Button, ImageList, ImageListItem, TextField, Select, MenuItem, FormControl, InputLabel} from '@mui/material';
+import axios from "axios";
 
 const baseStyle = {
   flex: 1,
@@ -71,12 +72,13 @@ const CreatePost = (props) => {
         body: "",
         images: undefined,
     })
-    console.log(data);
-    // const watchBody = watch('body', '');
     
     const handleSendPost = (e) => {
         e.preventDefault();
         post(route("store"));
+        // axios.post(route("store"), data).then((response) => {
+        //     window.location.reload();
+        // }).catch((error) => {console.log(error);});
     }
     
     const [files, setFiles] = useState([]);
@@ -144,43 +146,54 @@ const CreatePost = (props) => {
 
     return (
         <Card
-            component="form"
             sx={{
                 // '& .MuiTextField-root': { m: 1, width: '50ch' },
                 '& .MuiFormControl-root': { m: 1, width: '50ch' },
                 m:1,
-                p:2
+                p:2,
+                width:550,
+                height:"100%",
             }}
-            noValidate
-            autoComplete="off"
-            onSubmit={handleSendPost}
         >
+            <Box
+                component="form"
+                // noValidate
+                autoComplete="off"
+                onSubmit={handleSendPost}
+            >
             <Typography variant="h4" sx={{ m: 1 }}>投稿作成</Typography>
             
             <TextField
                 label="本文"
                 multiline
                 onChange={(e) => setData("body", e.target.value)}
+                required
                 // {...register('body')}
             />
             
             <FormControl>
                 <InputLabel>作品カテゴリー</InputLabel>
                 <Select label="作品カテゴリー" 
-                onChange={(e) => setData("category_id", e.target.value)}
-                // {...register('category_id')}
+                    onChange={(e) => setData("category_id", e.target.value)}
+                    required
+                    // {...register('category_id')}
                 >
-                    { categories.map((category) => (
-                      <MenuItem value={ category.id }>{ category.name }</MenuItem>  
+                    { auth.user.categories.map((category) => (
+                        <MenuItem value={ category.id }>{ category.name }</MenuItem>  
                     ))}
                 </Select>
             </FormControl>
 
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Link href={route("category.create")}>作品カテゴリーの新規作成</Link>
+            </Box>
+
             <Box sx={{ m:1 }} component="section" className="container">
                 <div {...getRootProps({className: 'dropzone', style})}>
                     <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                    <em>(4 files are the maximum number of files you can drop here)</em>
+                    <p>クリックもしくは、ドラッグアンドドロップで添付する画像を選択してください</p>
+                    <p>ひとつの投稿につき最大4枚まで画像を添付できます</p>
+                    {/* <em>(4 files are the maximum number of files you can drop here)</em> */}
                 </div>
                 {/* <aside style={thumbsContainer}>
                     {thumbs}
@@ -199,9 +212,12 @@ const CreatePost = (props) => {
                 ))}
             </ImageList>
             
-            <Button variant="outlined" type="submit" sx={{ m:1 }}>送信</Button>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
+                <Button variant="contained" type="submit" sx={{ m:1 }}>送信</Button>
+            </Box>
             
             {/* <Post author={auth.user} post={data} comments={0}/> */}
+            </Box>
         </Card>
   );
 }
