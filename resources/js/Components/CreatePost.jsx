@@ -75,7 +75,9 @@ const CreatePost = (props) => {
     
     const handleSendPost = (e) => {
         e.preventDefault();
-        post(route("store"));
+        post(route("store"), {
+            onSuccess: () => window.location.reload(),
+        });
         // axios.post(route("store"), data).then((response) => {
         //     window.location.reload();
         // }).catch((error) => {console.log(error);});
