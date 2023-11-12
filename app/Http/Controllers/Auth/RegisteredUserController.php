@@ -41,7 +41,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'message' => $request->message? $requst->message : '',
+            'message' => $request->message? $request->message : '',
         ];
         
         if ($request->file('icon_file')) {

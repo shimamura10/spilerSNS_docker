@@ -13,21 +13,19 @@ const Mypage = (props) => {
     const [ followingCategories, setFollowingCategories ] = useState(props.user.categories);
     const [ user, setUser ] = useState(props.user);
     
+    // フロントでフォロー中のカテゴリーを追加する
     const addFollowingCategory = (id, name) => {
-        // followingCategories.push({id:4, name:"ダンガンロンパ"})
         setFollowingCategories([ ...followingCategories, {id:id, name:name}]);
         setUser({ ...user, categories: [ ...user.categories, {id:id, name:name}]});
-        // setFollowingCategories([ ...followingCategories, {id:4, name:"ダンガンロンパ"}])
-        // console.log(followingCategories);
     }
 
+    // フロントでフォロー中のカテゴリーを削除する
     const deleteFollowingCategory = (id) => {
-        console.log(followingCategories);
-        console.log(followingCategories.filter((followingCategory) => followingCategory.id !== id));
         setFollowingCategories([ ...followingCategories.filter((followingCategory) => followingCategory.id !== id) ]);
         setUser({ ...user, categories: [ ...user.categories.filter((followingCategory) => followingCategory.id !== id) ]});
     }
 
+    // フォローを外す
     const unfollowCategory = (e, id) => {
         axios.delete(route("follow.category"), {
             data: {
@@ -45,7 +43,7 @@ const Mypage = (props) => {
                     <Avatar src={ user.icon_url } sx={{ width: 56, height: 56}}/>
                     <Typography variant="h4" sx={{ ml: 1 }}>{ user.name }</Typography>
                 </Box>
-                <Typography>{ user.message }</Typography>
+                <Typography sx={{whiteSpace:"pre-wrap"}}>{ user.message }</Typography>
                 {/* <Accordion>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -70,25 +68,27 @@ const Mypage = (props) => {
             
             <Box sx={{ display: 'flex', justifyContent: 'space-around'}}>
                 <TimeLine posts={ posts } auth={ props.auth }/>
-                <Card sx={{ p: 2, m:1, width: 500}}>
-                    <Typography variant="h5">カテゴリーのフォロー</Typography>
-                    <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory} unfollowCategory={unfollowCategory}/>
-                    <Typography variant="h5">フォロー中のカテゴリー</Typography>
-                    <List>
-                        { user.categories.map((category) => (
-                            <ListItem disablePadding key={category.id}>
-                                <IconButton 
-                                    arial-label=""
-                                    size="small"
-                                    onClick={(e) => unfollowCategory(e, category.id)}
-                                >
-                                    <PlaylistRemoveIcon sx={{ color: '#3291a8' }}/>
-                                </IconButton>
-                                <ListItemText primary={ category.name }/>
-                            </ListItem>
-                        )) }
-                    </List>
-                </Card>
+                { props.auth.user.id === user.id ?(
+                    <Card sx={{ p: 2, m:1, width: 500}} >
+                        <Typography variant="h5">カテゴリーのフォロー</Typography>
+                        <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory} unfollowCategory={unfollowCategory}/>
+                        <Typography variant="h5">フォロー中のカテゴリー</Typography>
+                        <List>
+                            { user.categories.map((category) => (
+                                <ListItem disablePadding key={category.id}>
+                                    <IconButton 
+                                        arial-label=""
+                                        size="small"
+                                        onClick={(e) => unfollowCategory(e, category.id)}
+                                    >
+                                        <PlaylistRemoveIcon sx={{ color: '#3291a8' }}/>
+                                    </IconButton>
+                                    <ListItemText primary={ category.name }/>
+                                </ListItem>
+                            )) }
+                        </List>
+                    </Card>
+                ): (null)}
             </Box>
             
         </Header>

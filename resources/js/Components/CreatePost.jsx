@@ -66,7 +66,7 @@ const img = {
 
 const CreatePost = (props) => {
     const { categories, auth } = props;
-    const {data, setData, post} = useForm({
+    const {data, setData, post, processing} = useForm({
         user_id: auth.user.id,
         category_id: 0,
         body: "",
@@ -75,7 +75,9 @@ const CreatePost = (props) => {
     
     const handleSendPost = (e) => {
         e.preventDefault();
-        post(route("store"));
+        post(route("store"), {
+            onSuccess: () => window.location.reload(),
+        });
         // axios.post(route("store"), data).then((response) => {
         //     window.location.reload();
         // }).catch((error) => {console.log(error);});
@@ -213,7 +215,7 @@ const CreatePost = (props) => {
             </ImageList>
             
             <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
-                <Button variant="contained" type="submit" sx={{ m:1 }}>送信</Button>
+                <Button variant="contained" type="submit" sx={{ m:1 }} disabled={processing}>送信</Button>
             </Box>
             
             {/* <Post author={auth.user} post={data} comments={0}/> */}

@@ -81,12 +81,13 @@ icon_urlがfillable
 fetchではなくaxiosにしたらでなくなった
 - [x] 投稿時の作品カテゴリーがフォローしてないのもでる
 - [ ] 投稿時にリロードしたい  
-投稿をaxiosにしてthenでリロードすれば良さそう
+投稿をaxiosにしてthenでリロードすれば良さそう  
+inertiaだとonSuccessでリロードする
 - [ ] もろもろバリデーション
 - [ ] `Deprecated: PHP Startup: Use of mbstring.internal_encoding is deprecated in Unknown on line 0`  
     - https://support.ntt.com/mw-premiumr3/faq/detail/pid2300001r2d/
 - [x] user登録時にステータスメッセージを設定
-- [ ] 投稿の改行が反映されない
+- [x] 投稿の改行が反映されない
 
 
 ## 日記
@@ -222,4 +223,10 @@ awsに他のサービスもいっぱいあるせいで認証システムとか�
 `window.location.reload();`
 
 ### 10/30
-- axios.delete
+- axios.delete  
+データ送るときの書き方がpostと違うので注意
+
+### 11/13
+- 複数行の投稿やコメントを改行して表示  
+Typographyにwhite-space: pre-wrapを指定
+- 投稿のアイコンから投稿主のマイページに飛べるようにした

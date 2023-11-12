@@ -73,6 +73,7 @@ class PostController extends Controller
         }
         
         return redirect(route("home"));
+        // return redirect(route("category.create"));
     }
 
     public function storeLike(Request $request)

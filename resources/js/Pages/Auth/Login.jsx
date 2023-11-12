@@ -98,6 +98,14 @@ export default function Login({ status, canResetPassword }) {
                         Log in
                     </PrimaryButton>
                 </div>
+
+                <div className='mt-4'>
+                    <p 
+                        className="text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-4"
+                    >
+                        ※ログインボタンを押しても画面遷移しない場合は、もう一度ログインボタンを押してください。
+                    </p>
+                </div>
             </form>
         </GuestLayout>
     );
