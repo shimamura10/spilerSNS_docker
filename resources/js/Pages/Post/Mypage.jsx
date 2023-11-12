@@ -68,25 +68,27 @@ const Mypage = (props) => {
             
             <Box sx={{ display: 'flex', justifyContent: 'space-around'}}>
                 <TimeLine posts={ posts } auth={ props.auth }/>
-                <Card sx={{ p: 2, m:1, width: 500}}>
-                    <Typography variant="h5">カテゴリーのフォロー</Typography>
-                    <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory} unfollowCategory={unfollowCategory}/>
-                    <Typography variant="h5">フォロー中のカテゴリー</Typography>
-                    <List>
-                        { user.categories.map((category) => (
-                            <ListItem disablePadding key={category.id}>
-                                <IconButton 
-                                    arial-label=""
-                                    size="small"
-                                    onClick={(e) => unfollowCategory(e, category.id)}
-                                >
-                                    <PlaylistRemoveIcon sx={{ color: '#3291a8' }}/>
-                                </IconButton>
-                                <ListItemText primary={ category.name }/>
-                            </ListItem>
-                        )) }
-                    </List>
-                </Card>
+                { props.auth.user.id === user.id ?(
+                    <Card sx={{ p: 2, m:1, width: 500}} >
+                        <Typography variant="h5">カテゴリーのフォロー</Typography>
+                        <FollowCategories categories={ categories } user={ user } addFollowingCategory={addFollowingCategory} unfollowCategory={unfollowCategory}/>
+                        <Typography variant="h5">フォロー中のカテゴリー</Typography>
+                        <List>
+                            { user.categories.map((category) => (
+                                <ListItem disablePadding key={category.id}>
+                                    <IconButton 
+                                        arial-label=""
+                                        size="small"
+                                        onClick={(e) => unfollowCategory(e, category.id)}
+                                    >
+                                        <PlaylistRemoveIcon sx={{ color: '#3291a8' }}/>
+                                    </IconButton>
+                                    <ListItemText primary={ category.name }/>
+                                </ListItem>
+                            )) }
+                        </List>
+                    </Card>
+                ): (null)}
             </Box>
             
         </Header>

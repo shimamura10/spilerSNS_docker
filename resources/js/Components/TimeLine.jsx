@@ -11,7 +11,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 const TimeLine = (props) => {
     const { auth } = props;
     const [ posts, setPosts ] = useState(props.posts.data);
-    console.log(props.posts);
 
     // コメントの表示・非表示の切り替え
     const displayComments = (e, id) => {
@@ -128,11 +127,13 @@ const TimeLine = (props) => {
     return (
         <Box>
             { posts.map((post) => (
-                <Card sx={{ p:2, m:1, width:500 }} key={post.id}>
+                <Card sx={{ p:2, m:1, width:550 }} key={post.id}>
                     {/* ヘッダー */}
                     <Box sx={{ display:'flex', alignItems:'center', justifyContent: 'space-between' }}>
                         <Box sx={{ display:'flex', alignItems: 'center'}}>
-                            <Avatar src={ post.author.icon_url } />
+                            <IconButton component={Link} href={route('mypage', {user: post.author.id})}>
+                                <Avatar src={ post.author.icon_url } component={Link} to={route('mypage', {user: post.author.id})} />
+                            </IconButton>
                             <Typography variant="h5" sx={{ ml: 1 }}>{ post.author.name }</Typography>
                         </Box>
                         <Chip label={post.category.name} variant="outlined" color="primary"/>
@@ -141,7 +142,7 @@ const TimeLine = (props) => {
                     {/* 本文 */}
                     <Typography sx={{ m:1, whiteSpace:"pre-wrap" }} variant="body1">{ post.body }</Typography>
                     {/* 画像 */}
-                    <ImageList sx={{ m:1, width: 483 }} cols={2} rowHeight={135} variant="quilted">
+                    <ImageList sx={{ my:1, mx:"auto", width: 483 }} cols={2} rowHeight={135} variant="quilted">
                         {post.images.map((image) => (
                             <ImageListItem key={image.image_url}>
                                 <img
