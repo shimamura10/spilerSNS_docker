@@ -13,21 +13,19 @@ const Mypage = (props) => {
     const [ followingCategories, setFollowingCategories ] = useState(props.user.categories);
     const [ user, setUser ] = useState(props.user);
     
+    // フロントでフォロー中のカテゴリーを追加する
     const addFollowingCategory = (id, name) => {
-        // followingCategories.push({id:4, name:"ダンガンロンパ"})
         setFollowingCategories([ ...followingCategories, {id:id, name:name}]);
         setUser({ ...user, categories: [ ...user.categories, {id:id, name:name}]});
-        // setFollowingCategories([ ...followingCategories, {id:4, name:"ダンガンロンパ"}])
-        // console.log(followingCategories);
     }
 
+    // フロントでフォロー中のカテゴリーを削除する
     const deleteFollowingCategory = (id) => {
-        console.log(followingCategories);
-        console.log(followingCategories.filter((followingCategory) => followingCategory.id !== id));
         setFollowingCategories([ ...followingCategories.filter((followingCategory) => followingCategory.id !== id) ]);
         setUser({ ...user, categories: [ ...user.categories.filter((followingCategory) => followingCategory.id !== id) ]});
     }
 
+    // フォローを外す
     const unfollowCategory = (e, id) => {
         axios.delete(route("follow.category"), {
             data: {
@@ -45,7 +43,7 @@ const Mypage = (props) => {
                     <Avatar src={ user.icon_url } sx={{ width: 56, height: 56}}/>
                     <Typography variant="h4" sx={{ ml: 1 }}>{ user.name }</Typography>
                 </Box>
-                <Typography>{ user.message }</Typography>
+                <Typography sx={{whiteSpace:"pre-wrap"}}>{ user.message }</Typography>
                 {/* <Accordion>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}

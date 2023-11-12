@@ -222,4 +222,9 @@ awsに他のサービスもいっぱいあるせいで認証システムとか�
 `window.location.reload();`
 
 ### 10/30
-- axios.delete
+- axios.delete  
+データ送るときの書き方がpostと違うので注意
+
+### 11/13
+- 複数行の投稿やコメントを改行して表示  
+Typographyにwhite-space: pre-wrapを指定

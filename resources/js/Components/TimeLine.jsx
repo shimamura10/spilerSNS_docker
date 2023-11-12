@@ -139,7 +139,7 @@ const TimeLine = (props) => {
                         {/* <Button variant="outlined">{ post.category.name }</Button> */}
                     </Box>
                     {/* 本文 */}
-                    <Typography sx={{ m:1 }} variant="body1">{ post.body }</Typography>
+                    <Typography sx={{ m:1, whiteSpace:"pre-wrap" }} variant="body1">{ post.body }</Typography>
                     {/* 画像 */}
                     <ImageList sx={{ m:1, width: 483 }} cols={2} rowHeight={135} variant="quilted">
                         {post.images.map((image) => (
