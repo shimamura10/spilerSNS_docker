@@ -27,31 +27,30 @@ const TimeLine = (props) => {
     
     const sendComment = (post_id, e) => {
         e.preventDefault();
-        // フロント側でコメント追加
-        const newPosts = [];
-        posts.map((post) => {
-            if (post.id == post_id)
-            {
-                post.comments.push({
-                    id: crypto.randomUUID,
-                    user_id: auth.user.id,
-                    post_id: post_id,
-                    body: e.target.comment.value,
-                    author: auth.user,
-                });
-                console.log(post);
-            } 
-            newPosts.push(post);
-        });
-        setPosts(newPosts);
-        // console.log(newPosts);
-        // console.log(posts);
         // バックエンドにコメント送信
         axios.post(route('create.comment'), {
             post_id: post_id,
             user_id: auth.user.id,
             body: e.target.comment.value
         }).then((response) => {
+            // フロント側でコメント追加
+            const newPosts = [];
+            posts.map((post) => {
+                if (post.id == post_id)
+                {
+                    post.comments.push({
+                        id: crypto.randomUUID,
+                        user_id: auth.user.id,
+                        post_id: post_id,
+                        body: e.target.comment.value,
+                        author: auth.user,
+                    });
+                    console.log(post);
+                } 
+                newPosts.push(post);
+            });
+            setPosts(newPosts);
+            e.target.comment.value = "";
         }).catch(error => {
         })
     }
