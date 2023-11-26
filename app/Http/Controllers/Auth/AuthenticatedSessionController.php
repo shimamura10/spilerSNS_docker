@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\UrlGenerator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,7 +35,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // $redirectUrl = redirect()->intended(RouteServiceProvider::HOME);
+        // if (app()->isProduction()) {
+        //     $redirectUrl = preg_replace('/.+:\/\//', 'https://', $redirectUrl);
+        // };
+        // dd($redirectUrl);
+
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME);
     }
 
     /**
