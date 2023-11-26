@@ -64,7 +64,7 @@ https://yanamura.hatenablog.com/entry/2017/05/12/094103
 https://www.engilaboo.com/laravel-react-csrf/  
 エラーが500になったが余計原因がわからず詰み  
 SQLのリレーションミスってただけだった()
-- [ ] ログインボタンを二回押さないとdashboardに遷移しない  
+- [x] ログインボタンを二回押さないとdashboardに遷移しない  
 原因不明だが発生しなくなった  
 ローカル環境だと発生しないだけだった  
 httpとhttpsが混在してるのが原因ぽい  
@@ -72,6 +72,8 @@ loginのpostはhttpsで送ってて、そのあとのredirectがhttpになって
 sessionのintendedにログインしてなくてはじかれたページのurlが保存されててログインするとそこに行こうとするらしい  
 確認してみたらhttpになってた。なんで...  
 intendedが登録されてないときでも同じエラーでるから根本的な原因は他にありそう
+ログイン時にリダイレクトされるurlをintendedを使わずにホームに固定したらとりあえず動いた
+UrlGeneratorのforceSchemeでやりたかったけど、vendorをいじらずにできなかった
 - [x] git操作で作成されたファイルに書き込めない！！！  
 mergeしたりbranch移動したりで作成され直したファイルの所有者がrootユーザーになっていてpermission deniedされる  
 普通にvscodeから作成したファイルは所有者が1000になってるので、rootユーザーが作成したファイルには書き込む権限がないのだろう。  
