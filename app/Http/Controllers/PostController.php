@@ -76,6 +76,18 @@ class PostController extends Controller
         // return redirect(route("category.create"));
     }
 
+    public function delete(Request $request)
+    {
+        $post = Post::where('id', $request->input('post_id'))->first();
+        // dd($post->user_id);
+
+        if (Auth::user()->id !== $post->user_id) {
+            return;
+        }
+
+        $post->delete();
+    }
+
     public function storeLike(Request $request)
     {
         $user_id = Auth::user()->id;

@@ -12,6 +12,18 @@ const TimeLine = (props) => {
     const { auth } = props;
     const [ posts, setPosts ] = useState(props.posts.data);
 
+    // 表示する投稿がないとき
+    if (posts.length === 0) {
+        return (
+            <Box>
+                <Card sx={{ p:2, m:1, width:500 }}>
+                    <p>表示可能な投稿がありません</p>
+                    <p>まずは<Link href={ route("mypage", {user: auth.user.id}) }>マイページ</Link>から作品カテゴリーをフォローしましょう</p>
+                </Card>
+            </Box>
+        );
+    }
+
     // コメントの表示・非表示の切り替え
     const displayComments = (e, id) => {
         const comments = document.getElementById(`post${id}-comments`);
@@ -112,16 +124,31 @@ const TimeLine = (props) => {
             console.log(response);
         })
     }
-    
-    if (posts.length === 0) {
-        return (
-            <Box>
-                <Card sx={{ p:2, m:1, width:500 }}>
-                    <p>表示可能な投稿がありません</p>
-                    <p>まずは<Link href={ route("mypage", {user: auth.user.id}) }>マイページ</Link>から作品カテゴリーをフォローしましょう</p>
-                </Card>
-            </Box>
-        );
+
+    // 投稿削除機能
+    const deletePost = (post_id) => {
+        axios.delete(route('post.delete'), {
+            data: {
+                post_id: post_id,
+            }
+        }).then((response) => {
+            window.location.reload()
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    // 投稿削除ボタン
+    const DeleteButton = (props) => {
+        const {author_id, post_id, comments} = props;
+        const user_id = auth.user.id;
+        if (author_id === user_id && comments === 0) {
+            return (
+                <Button onClick={() => deletePost(post_id) } sx={{ml:1}} color="error" variant="contained">削除</Button>
+            )
+        } else {
+            return (null)
+        }
     }
     return (
         <Box>
@@ -135,7 +162,10 @@ const TimeLine = (props) => {
                             </IconButton>
                             <Typography variant="h5" sx={{ ml: 1 }}>{ post.author.name }</Typography>
                         </Box>
-                        <Chip label={post.category.name} variant="outlined" color="primary"/>
+                        <Box>
+                            <Chip label={post.category.name} variant="outlined" color="primary"/>
+                            <DeleteButton author_id={post.author.id} post_id={post.id} comments={post.comments.length}/>
+                        </Box>
                         {/* <Button variant="outlined">{ post.category.name }</Button> */}
                     </Box>
                     {/* 本文 */}
