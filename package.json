@@ -5,7 +5,6 @@
         "build": "vite build",
         "watch": "vite build --watch"
     },
-    
     "devDependencies": {
         "@headlessui/react": "^1.4.2",
         "@inertiajs/react": "^1.0.0",
@@ -26,6 +25,8 @@
         "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^5.14.9",
         "@mui/material": "^5.14.9",
+        "laravel-echo": "^1.15.3",
+        "pusher-js": "^8.4.0-rc2",
         "react-dropzone": "^14.2.3",
         "react-router-dom": "^6.16.0",
         "react-window": "^1.8.9",

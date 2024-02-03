@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import Header from "@/Layouts/Header";
-import { Avatar, Card, Typography, Box, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemText, IconButton} from '@mui/material';
+import { Avatar, Card, Typography, Box, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemText, IconButton, Button} from '@mui/material';
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TimeLine from "@/Components/TimeLine";
 import FollowCategories from "@/Components/FollowCategories";
+import { Link } from '@inertiajs/react';
 
 const Mypage = (props) => {
     const { posts, categories } = props;
@@ -39,9 +40,18 @@ const Mypage = (props) => {
     return (
         <Header auth={props.auth} header={`${user.name}のマイページ`}>
             <Card sx={{ p:2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                    <Avatar src={ user.icon_url } sx={{ width: 56, height: 56}}/>
-                    <Typography variant="h4" sx={{ ml: 1 }}>{ user.name }</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'space-between'}}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
+                        <Avatar src={ user.icon_url } sx={{ width: 56, height: 56}}/>
+                        <Typography variant="h4" sx={{ ml: 1 }}>{ user.name }</Typography>
+                    </Box>
+                    <Button
+                    component={Link} 
+                    href={route('chat.index', {oponent: user.id})}
+                    variant="outlined"
+                    >
+                        プライベートチャット
+                    </Button>
                 </Box>
                 <Typography sx={{whiteSpace:"pre-wrap"}}>{ user.message }</Typography>
                 {/* <Accordion>

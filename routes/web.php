@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -63,6 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/chat/{oponent}', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/messages/{oponent}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+    Route::post('/messages', [ChatController::class, 'sendMessage'])->name('chat.store');
 });
 
 require __DIR__.'/auth.php';
