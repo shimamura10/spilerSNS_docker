@@ -39,7 +39,7 @@ class ChatController extends Controller
         $message->author_id = Auth::user()->id;
         $message->save();
 
-        broadcast(new MessageSent(Auth::user(), $message))->toOthers();
+        broadcast(new MessageSent(Auth::user(), $input["oponent_id"], $message))->toOthers();
         // $message = $user->messages()->create([
         //     'message' => $request['message'],
         //     'oponent_id' => $request['oponent_id'],

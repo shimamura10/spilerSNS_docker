@@ -6,7 +6,7 @@ import ChatForm from '@/Components/Chat/ChatForm';
 
 export default function Chats(props) {
     const user = props.auth.user;
-    const oponent = props.oponent
+    const oponent = props.oponent;
     const [messages, setMessages] = useState([]);
 
     // メッセージをバックエンドに送信
@@ -26,7 +26,7 @@ export default function Chats(props) {
         getChatMessages();
 
         // ブロードキャスト受信
-        window.Echo.private('chat').listen('MessageSent', (e) => {
+        window.Echo.private(`chat${oponent.id}${user.id}`).listen('MessageSent', (e) => {
             console.log("get messages");
             getChatMessages();
         })
@@ -36,7 +36,7 @@ export default function Chats(props) {
         <Header auth={props.auth} header={`${oponent.name}とのプライベートチャット`}>
             <div className="py-12 h-[600px]">
                 <div className="mx-[8%] bg-white h-full overflow-y-scroll p-3">
-                    <ChatMessages messages={messages} />
+                    <ChatMessages messages={messages} user={user}/>
                 </div>
                 <div className="mx-[8%] bg-white border-t-2">
                     <ChatForm user={user} sendMessage={sendMessage} />
