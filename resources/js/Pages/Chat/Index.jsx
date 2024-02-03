@@ -24,6 +24,12 @@ export default function Chats(props) {
 
     useEffect(() => {
         getChatMessages();
+
+        // ブロードキャスト受信
+        window.Echo.private('chat').listen('MessageSent', (e) => {
+            console.log("get messages");
+            getChatMessages();
+        })
     }, []);
 
     return (

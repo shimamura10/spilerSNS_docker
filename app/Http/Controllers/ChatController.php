@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Events\MessageSent;
 
 class ChatController extends Controller
 {
@@ -38,6 +39,7 @@ class ChatController extends Controller
         $message->author_id = Auth::user()->id;
         $message->save();
 
+        broadcast(new MessageSent(Auth::user(), $message))->toOthers();
         // $message = $user->messages()->create([
         //     'message' => $request['message'],
         //     'oponent_id' => $request['oponent_id'],
