@@ -104,6 +104,7 @@ class PostController extends Controller
     
     public function test()
     {
+        dd("Hello World");
         return Inertia::render("Post/Test");
     }
 }
